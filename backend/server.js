@@ -1,23 +1,24 @@
+// server.js contains all infra & execution logic
+// main entry point of backend
 
 require('dotenv').config();
-const express = require('express');
-const workoutRoutes = require('./routes/workouts');
+const app = require('./app');
+const connectToDB = require('./config/db');
 
-// express app
-const app = express();
 
-// middleware
-app.use(express.json());
-app.use((req, res, next) => {
-    console.log(req.path, req.method);
-    next();
-});
+const startServer = async () => {
+    try {
+        await connectToDB();
 
-// routes
-app.use('/api/workouts', workoutRoutes);
+        const port = process.env.PORT || 4000;
+        app.listen(port, () => {
+            console.log(`Listening for request on port: ${port}`)
+        });
 
-// listen for request
-const port = process.env.PORT;
-app.listen(port, () => {
-    console.log(`Listening for request on port: ${port}`)
-});
+    } catch (err) {
+        console.error(`Statup failed: ${err.message}`);
+        process.exit(1);
+    }
+};
+
+startServer();
