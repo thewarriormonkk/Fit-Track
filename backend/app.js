@@ -17,4 +17,16 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/workouts', workoutRoutes);
 
+// global error middleware (add after all routes)
+app.use((err, req, res, next) => {
+    err.statusCode = err.statusCode || 500;
+
+    res.status(err.statusCode).json({
+        status: 'error',
+        message: err.message,
+        // only show stack trace in development
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
+});
+
 module.exports = app;
