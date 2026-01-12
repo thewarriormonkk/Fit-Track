@@ -1,3 +1,7 @@
+# Add New Env Var Here
+.env
+.env.local
+
 # Logs
 logs
 *.log
