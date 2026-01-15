@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
 
 function WorkoutForm() {
+    const { dispatch } = useWorkoutsContext();
+
     const [title, setTitle] = useState('');
     const [load, setLoad] = useState('');
     const [reps, setReps] = useState('');
@@ -13,7 +16,7 @@ function WorkoutForm() {
         const payload = { title, reps, load };
         const headers = {'Content-Type': 'application/json'};
         const response = await fetch(API_URL, {       
-            method: 'POST', 
+            method: 'POST',
             headers,
             body: JSON.stringify(payload) 
         });
@@ -28,7 +31,7 @@ function WorkoutForm() {
             setTitle('');
             setReps('');
             setLoad('');
-            console.log('New Workout Added: ', data);
+            dispatch({ type: 'CREATE_WORKOUT', payload: data });
         }
         
 

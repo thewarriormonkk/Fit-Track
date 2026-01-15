@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import WorkoutDetails from '../components/WorkoutDetails';
 import WorkoutForm from '../components/WorkoutForm';
+import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
 
 
 const Home = () => {
-    const [workouts, setWorkouts] = useState(null);
+    const { workouts, dispatch } = useWorkoutsContext();
     const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
@@ -12,11 +13,11 @@ const Home = () => {
             const response = await fetch(API_URL);
             const data = await response.json();
             if (response.ok) {
-                setWorkouts(data);
+                dispatch({ type: 'SET_WORKOUTS', payload: data });
             }
         }
         fetchWorkouts();
-    }, []);
+    }, [dispatch, API_URL]);
 
     return (
             <div className="home">
