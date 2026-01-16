@@ -68,11 +68,6 @@ header a {
   color: #333;
 }
 
-.workout-details button {
-  border-style: none;
-  background-color: white;
-}
-
 /* new workout form */
 label,
 input {
