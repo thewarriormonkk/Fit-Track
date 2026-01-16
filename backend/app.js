@@ -21,11 +21,24 @@ app.use('/api/workouts', workoutRoutes);
 
 // global error middleware (add after all routes)
 app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
+    // mongoose validation error
+    if (err.name === 'ValidationError') {
+        // extract field names
+        const emptyFields = Object.keys(err.errors);
 
-    res.status(err.statusCode).json({
+        err.statusCode = 400;
+        err.message = 'Please fill in all required fields';
+        // it's known error, not crash
+        err.isOperational = true;
+        err.emptyFields = emptyFields;
+    }
+
+    const statusCode = err.statusCode || 500;
+
+    res.status(statusCode).json({
         status: 'error',
         message: err.message,
+        emptyFields: err.emptyFields || [],
         // only show stack trace in development
         stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });

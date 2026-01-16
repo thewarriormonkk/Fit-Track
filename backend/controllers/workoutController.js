@@ -30,16 +30,21 @@ const getWorkout = async (req, res) => {
 // @desc Create a new workout
 // @route POST /api/workouts
 // @access Private
-const createWorkout = async (req, res) => {
-    const { title, reps, load } = req.body;
+const createWorkout = async (req, res, next) => {
+    try {
+        const { title, reps, load } = req.body;
 
-    // add to db
-    const workout = await Workout.create({
-        title,
-        reps,
-        load
-    });
-    res.status(201).json(workout);
+        // add to db
+        const workout = await Workout.create({
+            title,
+            reps,
+            load
+        });
+        res.status(201).json(workout);
+    } catch (error) {
+        // pass raw error to the global handler
+        next(error);
+    }
 }
 
 // @desc Update a workout
