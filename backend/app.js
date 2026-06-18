@@ -3,6 +3,7 @@
 const cors = require('cors');
 const express = require('express');
 const workoutRoutes = require('./routes/workouts');
+const userRoutes = require('./routes/user');
 
 // initialized express app
 const app = express();
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/workouts', workoutRoutes);
+app.use('/api/user', userRoutes);
 
 // global error middleware (add after all routes)
 app.use((err, req, res, next) => {
